@@ -1,14 +1,25 @@
 # Assets
 
-Drop the logo files here with these exact names. The hub falls back to Anton
-type until they exist.
+Drop the logo files here with these exact names. Until they exist the hub falls
+back to Anton type, which looks fine.
 
-| File | What | Notes |
-|---|---|---|
-| `mark.svg` | the C monogram | square-ish, black on transparent |
-| `wordmark.svg` | CULTSIDERS lockup | black on transparent, no padding |
+| File | What |
+|---|---|
+| `mark.svg` | the C monogram |
+| `wordmark.svg` | the CULTSIDERS lockup |
 
-Both should be **black on transparent**. The hub inverts them automatically in
-dark mode, so a version baked onto a white or black rectangle will show its
-background. SVG is preferred; PNG works if you update the extension in
+PNG works too — just change the extension in the two `<img>` tags at the top of
 `index.html`.
+
+## One file covers both themes
+
+Upload the **black-on-white** version. The hub applies `filter: invert(1)` in
+dark mode, so black-on-white becomes white-on-black automatically. There is no
+need to make or maintain a second file.
+
+The white rectangle showing behind the logo in light mode is intentional.
+
+## Adding them
+
+Easiest path is the browser, no git needed: open the repo, go into `assets/`,
+**Add file → Upload files**, drag both in, commit.
