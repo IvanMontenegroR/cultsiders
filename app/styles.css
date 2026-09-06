@@ -37,14 +37,16 @@ button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit
 .app{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;transition:grid-template-columns .18s}
 .app.collapsed{--sb:68px}
 aside{border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden}
-.brand{display:flex;align-items:center;gap:11px;padding:16px;border-bottom:1px solid var(--line);min-height:61px}
+.brand{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);min-height:61px}
 .mark{width:34px;height:34px;flex:none;display:grid;place-items:center}
 .mark img{width:100%;height:100%;object-fit:contain;border-radius:4px}
 .mark .fb{font-family:var(--disp);font-size:23px;line-height:1;border:2px solid var(--text);width:100%;height:100%;display:grid;place-items:center;padding-top:2px}
-.wordmark{height:19px;display:flex;align-items:center;overflow:hidden}
-.wordmark img{height:100%;width:auto;border-radius:3px}
-.wordmark .fb{font-family:var(--disp);font-size:19px;line-height:1;white-space:nowrap}
+.wordmark{height:30px;display:flex;align-items:center;overflow:hidden}
+.wordmark img{height:100%;width:auto;display:block}
+.wordmark .fb{font-family:var(--disp);font-size:27px;line-height:1;white-space:nowrap}
 .app.collapsed .wordmark{display:none}
+.app.collapsed .brand{justify-content:center;padding:14px 0}
+.app.collapsed .brand::after{content:"C";font-family:var(--disp);font-size:24px;line-height:1;color:var(--text)}
 :root[data-theme="dark"] .mark img,:root[data-theme="dark"] .wordmark img{filter:invert(1)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mark img,:root:not([data-theme="light"]) .wordmark img{filter:invert(1)}}
 
@@ -154,6 +156,13 @@ main{min-width:0}
 .savewhy button{padding:6px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg);font-size:12.5px;cursor:pointer}
 .savewhy button:hover{border-color:var(--ok);color:var(--ok)}
 
+/* Sections stack in the DOM; only the active one is displayed. Losing this rule
+   is what made every screen show at once and made navigation look dead. */
+.view{display:none}
+.view.on{display:block}
+.sub-view{display:none}
+.sub-view.on{display:block}
+
 /* ---------------------------------------------------------------- table */
 table{border-collapse:collapse;width:100%;font-size:14px}
 th{font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-2);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -183,8 +192,8 @@ tr:last-child td{border-bottom:1px solid var(--line)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .skel{border:1px solid var(--line);border-radius:12px;padding:16px 18px;color:var(--text-2)}
 .auth{max-width:380px;margin:70px auto;text-align:center}
-.auth .mark{width:52px;height:52px;margin:0 auto 18px}
-.auth h2{font-family:var(--disp);font-size:30px;margin:0 0 6px}
+.auth .authmark{height:38px;justify-content:center;margin:0 auto 16px}
+.auth h2{font-family:var(--disp);font-size:22px;margin:0 0 6px;color:var(--text-2);letter-spacing:.18em}
 .auth p{color:var(--text-2);margin:0 0 20px;font-size:14px}
 .auth input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-bottom:10px}
 .auth .btn{width:100%}

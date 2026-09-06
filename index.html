@@ -5,16 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cultsiders Hub</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="assets/mark.png">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap">
-<link rel="stylesheet" href="app/styles.css">
+<link rel="stylesheet" href="app/styles.css?v=7">
 </head>
 <body>
 
 <!-- sign in (live mode only) -->
 <div class="auth" id="auth" hidden>
-  <div class="mark"><img src="assets/mark.png" alt="" onerror="this.remove()" onload="this.nextElementSibling.remove()"><span class="fb">C</span></div>
-  <h2>CULTSIDERS HUB</h2>
+  <div class="wordmark authmark"><img src="assets/wordmark.png" alt="Cultsiders" onerror="this.remove()" onload="this.nextElementSibling.remove()"><span class="fb">CULTSIDERS</span></div>
+  <h2>HUB</h2>
   <p>Private. Sign in with a link sent to your email.</p>
   <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
   <button class="btn solid" id="signin">Send the link</button>
@@ -23,7 +24,6 @@
 <div class="app" id="app" hidden>
   <aside>
     <div class="brand">
-      <div class="mark"><img src="assets/mark.png" alt="" onerror="this.remove()" onload="this.nextElementSibling.remove()"><span class="fb">C</span></div>
       <div class="wordmark"><img src="assets/wordmark.png" alt="Cultsiders" onerror="this.remove()" onload="this.nextElementSibling.remove()"><span class="fb">CULTSIDERS</span></div>
     </div>
     <nav id="nav">
@@ -63,8 +63,8 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="app/config.js"></script>
-<script src="app/store.js"></script>
-<script src="app/app.js"></script>
+<script src="app/config.js?v=7"></script>
+<script src="app/store.js?v=7"></script>
+<script src="app/app.js?v=7"></script>
 </body>
 </html>
