@@ -188,3 +188,38 @@ tr:last-child td{border-bottom:1px solid var(--line)}
 .auth p{color:var(--text-2);margin:0 0 20px;font-size:14px}
 .auth input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-bottom:10px}
 .auth .btn{width:100%}
+
+/* ------------------------------------------------------------ v2 additions */
+.err{border:1px solid var(--no-line);background:var(--no-bg);color:var(--no);border-radius:10px;padding:14px 16px;font-size:13.5px;margin-bottom:16px}
+.err b{display:block;margin-bottom:5px;font-weight:700}
+.err code{font-family:var(--mono);font-size:12px;display:block;margin-top:7px;white-space:pre-wrap;word-break:break-word;opacity:.85}
+
+/* today */
+.today{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:22px}
+.act{border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.act .n{font-family:var(--disp);font-size:26px;line-height:1;color:var(--text-2);flex:none;width:26px}
+.act .m{flex:1;min-width:200px}
+.act .m b{display:block;font-size:16px;font-weight:600;margin-bottom:2px}
+.act .m span{color:var(--text-2);font-size:13.5px}
+.act.done{opacity:.5}
+.act.done .m b{text-decoration:line-through}
+.hero{border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.hero .big{font-family:var(--disp);font-size:56px;line-height:.85}
+.hero .txt b{display:block;font-size:16px;font-weight:600}
+.hero .txt span{color:var(--text-2);font-size:13.5px}
+
+/* add row */
+.addrow{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.addrow input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.addrow select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+
+/* settings */
+.set{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.set h3{margin:0 0 3px;font-size:16px;font-weight:700}
+.set p{margin:0 0 12px;color:var(--text-2);font-size:13.5px}
+.set textarea{width:100%;min-height:180px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-family:var(--mono);font-size:12.5px;line-height:1.6;resize:vertical}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:13.5px;margin-bottom:12px}
+.kv dt{font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-2);padding-top:3px}
+.kv dd{margin:0}
+.dot{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:7px;vertical-align:middle}
+.dot.on{background:var(--ok)} .dot.off{background:var(--text-2)}

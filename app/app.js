@@ -11,13 +11,15 @@
   var STATES = ["idea","awaiting","ready","filmed","posted"];
   var SLABEL = { idea:"Idea", awaiting:"Waiting", ready:"Ready", filmed:"Filmed", posted:"Posted" };
   var VIEWS = {
+    today:["This weekend","What to film, in order. Nothing here needs the photoshoot."],
     ideas:["Ideas","Keep, edit or discard. Every choice trains the next batch."],
     inspo:["Inspiration","Real videos, broken down into what you could copy."],
     queue:["Queue","Concepts to film, shots to capture."],
-    stats:["Metrics","Entered by hand until Instagram is connected."]
+    stats:["Metrics","Entered by hand until Instagram is connected."],
+    settings:["Settings","Voice, connection, and starting over."]
   };
 
-  var state = { view:"ideas", filter:"all", inspoTab:"discover" };
+  var state = { view:"today", filter:"all", inspoTab:"discover", queueFilter:"all" };
 
   function toast(msg) {
     var t = $("#toast"); t.textContent = msg; t.classList.add("show");
@@ -140,8 +142,21 @@
 
   /* --------------------------------------------------------------- queue */
   async function renderQueue() {
-    var rows = await Store.queue.all();
-    $('[data-view="queue"]').innerHTML = '<div class="tw"><table>'
+    var all = await Store.queue.all();
+    var rows = state.queueFilter === "all" ? all : all.filter(function (r) {
+      return state.queueFilter === "concept" ? r.kind === "concept" : r.kind === "shot";
+    });
+    $('[data-view="queue"]').innerHTML =
+      '<div class="addrow"><input id="qTitle" placeholder="Add something to film">'
+      + '<select id="qKind"><option value="concept">Concept</option><option value="shot">Shot</option></select>'
+      + '<select id="qJob"><option value="attention">Attention</option><option value="desire">Desire</option><option value="trust">Trust</option></select>'
+      + '<button class="btn solid" id="qAdd">Add</button></div>'
+      + '<div class="filters" id="qfilters">'
+      + [["all","All"],["concept","Concepts"],["shot","Shots"]].map(function (f) {
+          return '<button aria-pressed="'+(state.queueFilter===f[0])+'" data-qf="'+f[0]+'">'+f[1]+'</button>';
+        }).join("")
+      + '</div>'
+      + '<div class="tw"><table>'
       + '<thead><tr><th>Item</th><th>Type</th><th>Job</th><th>State</th></tr></thead><tbody>'
       + rows.map(function (q) {
           return '<tr><td>'+esc(q.title)+'</td><td>'+esc(q.kind==="shot"?"Shot":"Concept")+'</td>'
@@ -150,7 +165,7 @@
         }).join("")
       + '</tbody></table></div>'
       + '<div class="empty" style="margin-top:14px">Concepts get generated. Shots just get checked off.</div>';
-    $("#navQueue .cnt").textContent = rows.filter(function(q){return q.state!=="posted";}).length;
+    $("#navQueue .cnt").textContent = all.filter(function(q){return q.state!=="posted";}).length;
   }
 
   /* --------------------------------------------------------------- stats */
@@ -185,7 +200,85 @@
           + '</tbody></table></div>' : '');
   }
 
-  var RENDER = { ideas: renderIdeas, inspo: renderInspo, queue: renderQueue, stats: renderStats };
+
+  /* --------------------------------------------------------------- today */
+  async function renderToday() {
+    var q = await Store.queue.all();
+    var pending = await Store.ideas.pending();
+    var ready = q.filter(function (x) { return x.state === "ready"; });
+    var filmed = q.filter(function (x) { return x.state === "filmed"; });
+    var todo = ready.slice(0, 3);
+
+    var html = '<div class="hero"><div class="big">' + todo.length + '</div>'
+      + '<div class="txt"><b>' + (todo.length ? 'ready to film' : 'nothing ready')
+      + '</b><span>'
+      + (todo.length
+          ? filmed.length + ' filmed and not cut · ' + pending.length + ' ideas waiting on a verdict'
+          : 'Judge some ideas — keeping one puts it here.')
+      + '</span></div></div>';
+
+    if (todo.length) {
+      html += '<div class="today">' + todo.map(function (t, i) {
+        return '<div class="act" data-q="' + t.id + '"><div class="n">'
+          + String(i + 1).padStart(2, "0") + '</div>'
+          + '<div class="m"><b>' + esc(t.title) + '</b>'
+          + '<span>' + esc(t.kind === "shot" ? "Shot" : "Concept") + ' · ' + esc(t.job || "") + '</span></div>'
+          + '<button class="btn sm markfilmed">Mark filmed</button></div>';
+      }).join("") + '</div>';
+    }
+
+    html += '<div class="empty">Everything here is filmable alone, on a phone, in daylight. '
+      + 'The photoshoot only blocks model and lifestyle shots.</div>';
+    $('[data-view="today"]').innerHTML = html;
+    $("#navToday .cnt").textContent = todo.length;
+  }
+
+  /* ------------------------------------------------------------ settings */
+  async function renderSettings() {
+    var judged = await Store.ideas.judged();
+    var host = $('[data-view="settings"]');
+    host.innerHTML =
+      '<div class="set"><h3>Connection</h3>'
+      + '<p>The hub runs either way. Local means this browser only.</p>'
+      + '<dl class="kv">'
+      + '<dt>Mode</dt><dd><span class="dot ' + (Store.live ? "on" : "off") + '"></span>'
+      + (Store.live ? "Live — Supabase" : "Local — this browser") + '</dd>'
+      + '<dt>Verdicts</dt><dd>' + judged.length + ' recorded</dd>'
+      + '<dt>Generation</dt><dd>' + (Store.live ? "Claude via Edge Function" : "Sample pool, no API calls") + '</dd>'
+      + '</dl>'
+      + (Store.live ? '' : '<p style="margin:0">Fill <code>app/config.js</code> with your Supabase URL and anon key to switch.</p>')
+      + '</div>'
+
+      + '<div class="set"><h3>Voice</h3>'
+      + '<p>Examples, not adjectives. Real accepted and rejected lines produce consistent output; a description does not.</p>'
+      + '<textarea id="voiceBox">' + esc(VOICE_SEED) + '</textarea>'
+      + '<div style="margin-top:10px"><button class="btn solid" id="saveVoice">Save</button></div></div>'
+
+      + '<div class="set"><h3>Start over</h3>'
+      + '<p>Wipes local ideas, verdicts and queue, and puts the seed back. Does not touch Supabase.</p>'
+      + '<button class="btn" id="resetLocal">Reset local data</button></div>';
+  }
+
+  var VOICE_SEED = [
+    "Lowercase. Short. No adjectives, no hype, never explains the joke.",
+    "US English, native register. Numbers beat descriptions.",
+    "",
+    "ACCEPTED:",
+    '  "i ordered from 5 anime clothing sites. two sent what they showed."',
+    "  Something happened and there is a result. A whole story in one line.",
+    "",
+    "REJECTED:",
+    '  "if you know, you know."                             -> caption, not a concept',
+    '  "oversized. not a tent."                             -> caption, not a concept',
+    '  "printing the character\'s face is the easy way out." -> opinion with no event',
+    '  "someone asked if this is official merch. it isn\'t." -> hypothetical, nobody asked',
+    "",
+    "The test: does this require doing something and reporting what happened?",
+    "If it only presents the product, discard it."
+  ].join("\n");
+
+  var RENDER = { today: renderToday, ideas: renderIdeas, inspo: renderInspo,
+                 queue: renderQueue, stats: renderStats, settings: renderSettings };
 
   async function show(v) {
     state.view = v;
@@ -194,7 +287,13 @@
     $("#vt").textContent = VIEWS[v][0];
     $("#vs").textContent = VIEWS[v][1];
     $("#gen").hidden = v !== "ideas";
-    await RENDER[v]();
+    try { await RENDER[v](); }
+    catch (err) {
+      $('[data-view="' + v + '"]').innerHTML =
+        '<div class="err"><b>This screen failed to render.</b>'
+        + 'Send me what is below and I can fix it.'
+        + '<code>' + esc(err && err.stack ? err.stack : String(err)) + '</code></div>';
+    }
   }
 
   /* --------------------------------------------------------------- events */
@@ -274,6 +373,26 @@
       toast("Logged"); return renderStats();
     }
 
+    var qf = t.closest("#qfilters button");
+    if (qf) { state.queueFilter = qf.dataset.qf; return renderQueue(); }
+
+    if (t.closest("#qAdd")) {
+      var title = $("#qTitle").value.trim(); if (!title) return;
+      await Store.queue.add({ kind:$("#qKind").value, title:title, job:$("#qJob").value, state:"idea" });
+      toast("Added"); return renderQueue();
+    }
+
+    var mf = t.closest(".markfilmed");
+    if (mf) {
+      var act = mf.closest(".act");
+      await Store.queue.setState(act.dataset.q, "filmed");
+      act.classList.add("done"); mf.remove(); toast("Filmed");
+      return;
+    }
+
+    if (t.closest("#resetLocal")) { Store.reset(); return; }
+    if (t.closest("#saveVoice")) { toast(Store.live ? "Saved" : "Local mode — connect Supabase to persist voice"); return; }
+
     if (t.closest("#signin")) {
       var em = $("#email").value.trim(); if (!em) return;
       await Store.auth.signIn(em); toast("Check your email for the link");
@@ -288,6 +407,6 @@
     if (Store.live && !user) { $("#app").hidden = true; $("#auth").hidden = false; return; }
     $("#auth").hidden = true; $("#app").hidden = false;
     if (!Store.live) $("#localBanner").hidden = false;
-    await show("ideas");
+    await show("today");
   })();
 })();

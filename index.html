@@ -27,10 +27,12 @@
       <div class="wordmark"><img src="assets/wordmark.png" alt="Cultsiders" onerror="this.remove()" onload="this.nextElementSibling.remove()"><span class="fb">CULTSIDERS</span></div>
     </div>
     <nav id="nav">
-      <button id="navIdeas" aria-current="true" data-v="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg><span class="t">Ideas</span><span class="cnt">·</span></button>
+      <button id="navToday" aria-current="true" data-v="today"><svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg><span class="t">This weekend</span><span class="cnt">·</span></button>
+      <button id="navIdeas" data-v="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg><span class="t">Ideas</span><span class="cnt">·</span></button>
       <button id="navInspo" data-v="inspo"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/></svg><span class="t">Inspiration</span><span class="cnt">·</span></button>
       <button id="navQueue" data-v="queue"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="t">Queue</span><span class="cnt">·</span></button>
       <button id="navStats" data-v="stats"><svg viewBox="0 0 24 24"><path d="M3 21h18M7 21V11M12 21V5M17 21v-7"/></svg><span class="t">Metrics</span></button>
+      <button id="navSettings" data-v="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="t">Settings</span></button>
     </nav>
     <div class="sbfoot">
       <button id="signout"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="t">Sign out</span></button>
@@ -40,18 +42,20 @@
 
   <main>
     <div class="top">
-      <div><h1 id="vt">Ideas</h1><div class="sub" id="vs">Keep, edit or discard. Every choice trains the next batch.</div></div>
-      <button class="btn solid" id="gen">Generate 4 more</button>
+      <div><h1 id="vt">This weekend</h1><div class="sub" id="vs">What to film, in order.</div></div>
+      <button class="btn solid" id="gen" hidden>Generate 4 more</button>
     </div>
     <div class="body">
       <div class="banner" id="localBanner" hidden>
         <b>Local mode.</b> Running on this browser with seed data — nothing is shared and nothing calls Claude.
         Fill in <code>app/config.js</code> to go live.
       </div>
-      <section class="view on" data-view="ideas"></section>
+      <section class="view on" data-view="today"></section>
+      <section class="view" data-view="ideas"></section>
       <section class="view" data-view="inspo"></section>
       <section class="view" data-view="queue"></section>
       <section class="view" data-view="stats"></section>
+      <section class="view" data-view="settings"></section>
     </div>
   </main>
 </div>
