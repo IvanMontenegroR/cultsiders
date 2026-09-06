@@ -100,3 +100,48 @@ begin
          to authenticated using (true) with check (true)', t);
   end loop;
 end $$;
+
+-- ---------------------------------------------------------------------- seed
+-- Voice as EXAMPLES. "short, dry, doesn't explain" produces inconsistent
+-- output; real accepted and rejected lines produce consistent output. These are
+-- Ivan's actual verdicts, so the generator starts calibrated instead of cold.
+insert into brand_docs (key, content) values
+('voice', $voice$
+Lowercase. Short. No adjectives, no hype, never explains the joke.
+US English, native register. Numbers beat descriptions.
+
+ACCEPTED — write like this:
+  "i ordered from 5 anime clothing sites. two sent what they showed."
+  Why: something happened and there is a result. A whole story in one line.
+
+REJECTED — and why:
+  "if you know, you know."                              → caption, not a concept
+  "oversized. not a tent."                              → caption, not a concept
+  "printing the character's face is the easy way out."  → opinion with no event
+  "someone asked if this is official merch. it isn't."  → hypothetical, nobody asked yet
+
+The test: does this require him to do something and report what happened?
+If it only presents the product, it gets discarded.
+$voice$),
+('rules', $rules$
+Never propose:
+  - transformation / making-of — he does not draw the designs himself
+  - counts and listicles
+  - ambient or texture-only pieces
+  - anything he cannot film alone, on a phone, over a weekend
+
+Three jobs, and every concept does exactly one:
+  attention — brings strangers        (unbox, test, comparison, claim, reaction)
+  desire    — makes them want it      (on body, detail, in context, recognition)
+  trust     — closes the sale         (packing, customer, honest answer)
+
+Too much attention means traffic without customers. Weight toward whichever
+job is thinnest in what he has kept.
+$rules$),
+('house_codes', $codes$
+Ichimatsu (market checkerboard) is the permanent substrate. On the web it stays
+tier 01: small scale, low contrast, edges and voids only. Never a hero graphic.
+Wordmark and monogram are black on white; dark mode inverts them.
+Anton stands in for the wordmark type when the asset is missing.
+$codes$)
+on conflict (key) do nothing;
